@@ -5,101 +5,6 @@
 - We will be referring to geeksforgeeks for problem statement
 """
 
-class Node():
-    def __init__(self, value=None):
-        self.value = value
-        self.next = None
-
-class SLinkedList():
-    def __init__(self, head=None, tail=None):
-        self.head = head
-        self.tail = tail
-        self.len = 0
-    def __iter__(self):
-        node = self.head
-        while node:
-            yield node
-            node = node.next
-    def insert(self, value, location):
-        newNode = Node(value)
-        if self.head is None:
-            self.head = newNode
-            self.tail = newNode
-        else:
-            if location == 0: #insert at the start
-                newNode.next = self.head
-                self.head = newNode
-            elif location < 0: #insert at the end
-                self.tail.next = newNode
-                self.tail = newNode
-            else:
-                prevNode = self.head
-                index = 0
-                while index < location-1 and prevNode.next is not None:
-                    prevNode = prevNode.next
-                    index += 1
-                if prevNode.next is None:
-                    prevNode.next = newNode
-                    self.tail = newNode
-                else:
-                    newNode.next = prevNode.next
-                    prevNode.next = newNode
-        self.len += 1
-
-    def traversalSLL(self):
-        if self.head is None:
-            print("There are no nodes in Single LL")
-        else:
-            node = self.head
-            while node:
-                print(node.value)
-                node = node.next
-
-    def searchSLL(self, value):
-        if self.head is None:
-            return None
-        else:
-            node = self.head
-            index = 0
-            while node:
-                if node.value == value:
-                    return index
-                node = node.next
-                index += 1
-            return None
-    
-    def deleteNode(self, location):
-        if self.len == 0:
-            return None
-        elif self.len == 1:
-            self.tail = None
-            self.head = None
-        else:
-            if location == 0:
-                self.head = self.head.next
-            elif location < self.len-1 and location > 0:
-                node = self.head
-                index = 0
-                while index < location - 1:
-                    node = node.next
-                    index += 1
-                node.next = node.next.next
-            else:
-                node = self.head
-                index = 0
-                while index < self.len - 2:
-                    node = node.next
-                    index += 1
-                self.tail = node
-                node.next = None
-        if self.len >= 1:
-            self.len -= 1
-    
-    def clear(self):
-        self.head = None
-        self.tail = None
-        self.len = 0
-
 ######## Problem Statement 1: Find the middle of a given linked list (Easy) #########
 """
 Given a singly linked list, find the middle of the linked list. 
@@ -108,3 +13,74 @@ If there are even nodes, then there would be two middle nodes,
 we need to print the second middle element. 
 For example, if the given linked list is 1->2->3->4->5->6 then the output should be 4. 
 """
+
+class Node():
+    def __init__(self, value, next=None):
+        self.value = value
+        self.next = next
+
+class SLinkedList():
+    def __init__(self):
+        self.head = None
+        self.tail = None
+    def push(self, value):
+        """
+        add node at the end of the LL
+        """
+        node = Node(value)
+        if self.head is None:
+            self.head = node
+            self.tail = node
+        else:
+            self.tail.next = node
+            self.tail = node
+    
+    def __iter__(self):
+        node = self.head
+        while node:
+            yield node
+            node = node.next
+        
+    def insert(self, value, location):
+        node = Node(value)
+        if self.head is None:
+            self.head = node
+            self.tail = node
+        else:
+            if location == 0:
+                node.next = self.head
+                self.head = node
+            elif location < 0:
+                self.push(value)
+            else:
+                prevNode = self.head
+                index = 0
+                while prevNode.next is not None and index < location-1:
+                    prevNode = prevNode.next
+                    index += 1
+                if prevNode.next is None:
+                    self.tail.next = node
+                    self.tail = node
+                else:
+                    node.next = prevNode.next
+                    prevNode.next = node
+
+    def find_middle_node(self, head):
+        if head is None:
+            return
+        
+        slow_node = head
+        fast_node = head
+        while fast_node.next is not None and fast_node.next.next is not None:
+            slow_node = slow_node.next
+            fast_node = fast_node.next.next
+        return slow_node.value
+
+if __name__ == '__main__':
+    sll = SLinkedList()
+    for i in range(4):
+        sll.push(i)
+    
+    print([node.value for node in sll])
+
+    print(sll.find_middle_node(sll.head))

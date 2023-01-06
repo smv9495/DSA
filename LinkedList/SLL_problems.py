@@ -23,6 +23,7 @@ class SLinkedList():
     def __init__(self):
         self.head = None
         self.tail = None
+
     def push(self, value):
         """
         add node at the end of the LL
@@ -40,31 +41,8 @@ class SLinkedList():
         while node:
             yield node
             node = node.next
-        
-    def insert(self, value, location):
-        node = Node(value)
-        if self.head is None:
-            self.head = node
-            self.tail = node
-        else:
-            if location == 0:
-                node.next = self.head
-                self.head = node
-            elif location < 0:
-                self.push(value)
-            else:
-                prevNode = self.head
-                index = 0
-                while prevNode.next is not None and index < location-1:
-                    prevNode = prevNode.next
-                    index += 1
-                if prevNode.next is None:
-                    self.tail.next = node
-                    self.tail = node
-                else:
-                    node.next = prevNode.next
-                    prevNode.next = node
 
+class solution1():
     def find_middle_node(self, head):
         if head is None:
             return
@@ -76,11 +54,129 @@ class SLinkedList():
             fast_node = fast_node.next.next
         return slow_node.value
 
+######## Problem Statement 2: Count of number of Linked List (Easy) #########
+"""
+Given a singly linked list and a key, 
+count the number of occurrences of the given key in the linked list. 
+For example, if the given linked list is 1->2->1->2->1->3->1 
+and the given key is 1, then the output should be 4.
+"""
+class solution2():
+    def count(self, sll, key):
+        count = 0
+        node = sll.head
+        while node:
+            if node.value == key:
+                count += 1
+            node = node.next
+        return count
+        
+######## Problem Statement 3: Check if given LL is Circular (Easy) #########
+"""
+A linked list is called circular 
+if it is not NULL-terminated and all nodes are connected in the form of a cycle. 
+Below is an example of a circular linked list.
+"""
+class CSLinkedList():
+    def __init__(self):
+        self.head = None
+        self.tail = None
+
+    def __iter__(self):
+        node = self.head
+        while node:
+            yield node
+            if node.next == self.head:
+                break
+            node = node.next
+
+    def push(self, value):
+        node = Node(value)
+        # true while inserting first node
+        if self.head is None:
+            self.head = node
+            self.tail = node
+            node.next = self.head
+            return
+        # inserting after first node
+        tempNode = self.head
+        while True:
+            if tempNode.next == self.head:
+                break
+            tempNode = tempNode.next
+        tempNode.next = node
+        node.next = self.head
+        self.tail = node
+
+class solution3():
+    def isCircular(self, ll):
+        node = ll.head
+        while node:
+            if node.next == ll.head:
+                return 1
+            node = node.next
+        return 0
+
+######## Problem Statement 4: Count nodes in Circular linked list (Easy) #########
+"""
+Given a circular linked list, count the number of nodes in it. 
+For example, the output is 5 for the below list. 
+"""
+class solution4():
+    def count_nodes(self, cll):
+        node = cll.head
+        count = 0
+        while node:
+            count += 1
+            if node.next == cll.head:
+                break
+            node = node.next
+        return count
+
+######## Problem Statement 5: Convert Singly LL into Circular LL (Easy) #########
+"""
+Given a singly linked list, 
+we have to convert it into circular linked list. 
+For example, 
+we have been given a singly linked list with four nodes 
+and we want to convert this singly linked list into circular linked list.
+"""
+class solution5():
+    def isCircular(self, ll):
+        node = ll.head
+        while node:
+            if node.next == ll.head:
+                return 1
+            node = node.next
+        return 0
+
+    def sll_to_cll(self, ll):
+        if ll.head is None:
+            return ll
+        if not self.isCircular(ll):
+            node = ll.head
+            while node.next:
+                node = node.next
+            node.next = ll.head
+        return ll
+
 if __name__ == '__main__':
     sll = SLinkedList()
-    for i in range(4):
-        sll.push(i)
+    cll = CSLinkedList()
+    for i in range(10):
+        sll.push(i%3)
+        cll.push(i)
     
     print([node.value for node in sll])
+    print([node.value for node in cll])
 
-    print(sll.find_middle_node(sll.head))
+    print(solution1().find_middle_node(sll.head))
+    print(solution2().count(sll, 4))
+    print(solution3().isCircular(sll))
+    print(solution3().isCircular(cll))
+    print(solution4().count_nodes(cll))
+    print("Before")
+    print(f"Is circular: {solution3().isCircular(sll)}")
+    print("After converting")
+    sll = solution5().sll_to_cll(sll)
+    print(f"Is circular: {solution3().isCircular(sll)}")

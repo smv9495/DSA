@@ -105,29 +105,28 @@ class SLinkedList():
             yield node
             node = node.next
     def insert(self, value, location):
-        newNode = Node(value)
+        node = Node(value)
         if self.head is None:
-            self.head = newNode
-            self.tail = newNode
+            self.head = node
+            self.tail = node
         else:
-            if location == 0: #insert at the start
-                newNode.next = self.head
-                self.head = newNode
-            elif location < 0: #insert at the end
-                self.tail.next = newNode
-                self.tail = newNode
+            if location == 0:
+                node.next = self.head
+                self.head = node
+            elif location < 0:
+                self.push(value)
             else:
                 prevNode = self.head
                 index = 0
-                while index < location-1 and prevNode.next is not None:
+                while prevNode.next is not None and index < location-1:
                     prevNode = prevNode.next
                     index += 1
                 if prevNode.next is None:
-                    prevNode.next = newNode
-                    self.tail = newNode
+                    self.tail.next = node
+                    self.tail = node
                 else:
-                    newNode.next = prevNode.next
-                    prevNode.next = newNode
+                    node.next = prevNode.next
+                    prevNode.next = node
                 
 
 # sll = SLinkedList()
@@ -185,37 +184,34 @@ class SLinkedList():
     def __init__(self, head=None, tail=None):
         self.head = head
         self.tail = tail
-        self.len = 0
     def __iter__(self):
         node = self.head
         while node:
             yield node
             node = node.next
     def insert(self, value, location):
-        newNode = Node(value)
+        node = Node(value)
         if self.head is None:
-            self.head = newNode
-            self.tail = newNode
+            self.head = node
+            self.tail = node
         else:
-            if location == 0: #insert at the start
-                newNode.next = self.head
-                self.head = newNode
-            elif location < 0: #insert at the end
-                self.tail.next = newNode
-                self.tail = newNode
+            if location == 0:
+                node.next = self.head
+                self.head = node
+            elif location < 0:
+                self.push(value)
             else:
                 prevNode = self.head
                 index = 0
-                while index < location-1 and prevNode.next is not None:
+                while prevNode.next is not None and index < location-1:
                     prevNode = prevNode.next
                     index += 1
                 if prevNode.next is None:
-                    prevNode.next = newNode
-                    self.tail = newNode
+                    self.tail.next = node
+                    self.tail = node
                 else:
-                    newNode.next = prevNode.next
-                    prevNode.next = newNode
-        self.len += 1
+                    node.next = prevNode.next
+                    prevNode.next = node
 
     def traversalSLL(self):
         if self.head is None:
@@ -238,33 +234,6 @@ class SLinkedList():
                 node = node.next
                 index += 1
             return None
-    
-    def deleteNode(self, location):
-        if self.len == 0:
-            return None
-        elif self.len == 1:
-            self.tail = None
-            self.head = None
-        else:
-            if location == 0:
-                self.head = self.head.next
-            elif location < self.len-1 and location > 0:
-                node = self.head
-                index = 0
-                while index < location - 1:
-                    node = node.next
-                    index += 1
-                node.next = node.next.next
-            else:
-                node = self.head
-                index = 0
-                while index < self.len - 2:
-                    node = node.next
-                    index += 1
-                self.tail = node
-                node.next = None
-        if self.len >= 1:
-            self.len -= 1
     
     def clear(self):
         self.head = None

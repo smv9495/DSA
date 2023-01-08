@@ -29,14 +29,44 @@ class CSLinkedList():
             node.next = self.head
             return
         # inserting after first node
-        tempNode = self.head
-        while True:
-            if tempNode.next == self.head:
-                break
-            tempNode = tempNode.next
-        tempNode.next = node
         node.next = self.head
+        self.tail.next = node
         self.tail = node
+    def pop(self, location=-1):
+        # c1: LL is empty
+        if self.head is None:
+            return
+        # c2: LL have only 1 node
+        if self.head == self.tail:
+            self.tail.next = None
+            self.head = None
+            self.tail = None
+            return
+        # c3: LL have more than 1 node
+            # a: location = 0
+        if location == 0:
+            self.head = self.head.next
+            self.tail = self.head
+            # b: loaction = -1
+        if location == -1:
+            prevNode = self.head
+            while True:
+                if prevNode.next == self.tail:
+                    break
+                prevNode = prevNode.next
+            prevNode.next = self.head
+            self.tail = prevNode
+            return
+            # c: location = intermediate
+        prevNode = self.head
+        index = 0
+        while index < location - 1:
+            if prevNode.next == self.tail:
+                prevNode.next = self.head
+                self.tail = prevNode
+                return
+            prevNode = prevNode.next
+        prevNode.next = prevNode.next.next
     def insert(self, value, location):
         node = Node(value)
         # case 1: LL is empty
@@ -72,8 +102,8 @@ class CSLinkedList():
 if __name__ == '__main__':
     csll = CSLinkedList()
     print([node.value for node in csll])
-    for i in range(5):
+    for i in range(2):
         csll.insert(i, 0)
     print([node.value for node in csll])
-    csll.insert(99, 4)
+    csll.pop(2)
     print([node.value for node in csll])
